@@ -1,0 +1,195 @@
+
+<footer id="aa-footer">
+
+
+  <!-- footer bottom -->
+  <div class="aa-footer-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-footer-top-area">
+            <div class="row">
+              <div class="col-md-3 col-sm-6">
+                <div class="aa-footer-widget">
+                  <h3>Main Menu</h3>
+                  <ul class="aa-footer-nav">
+                    <li><a href="{{shop.url}}">Home</a></li>
+                    <li><a href="/collections">Collections</a></li>
+                    <li><a href="/blogs/news">News</a></li>
+                    {%if pages.about-us != blank %}
+                    <li><a href="/pages/about-us">About us </a></li>
+                    {%endif%}
+
+                    {%if pages.about != blank %}
+                    <li><a href="/pages/about">About us </a></li>
+                    {%endif%} 
+                    
+                    {%if pages.contact != blank %}
+                    <li><a href="/pages/contact"> Contact </a></li>
+                    {%endif%}
+
+                  </ul>
+                </div>
+              </div>
+               
+              <div class="col-md-3 col-sm-6">
+                <div class="aa-footer-widget">
+                  <div class="aa-footer-widget">
+                    <h3>Knowledge Base</h3>
+                    <ul class="aa-footer-nav">
+                      <li><a href="#">Delivery</a></li>
+                      <li><a href="#">Returns</a></li>
+                      <li><a href="#">Services</a></li>
+                      <li><a href="#">Discount</a></li>
+                      <li><a href="#">Special Offer</a></li>
+                      {% for paz in shop.pages %}
+                        <li><a href="{{paz.url}}">{{paz.title}}</a></li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div> 
+              {% if section.settings.show_policies %}
+              <div class="col-md-3 col-sm-6">
+                <div class="aa-footer-widget">
+                  <div class="aa-footer-widget">
+                    <h3>Policies</h3>
+                    <ul class="aa-footer-nav">
+                      {% for policy in shop.policies %}
+                        <li><a href="{{policy.url}}">{{policy.title}}</a></li>
+                      {% endfor %}
+                      <li><a href="/policey/refund-policy">title</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              {%endif%}
+
+              <div class="col-md-3 col-sm-6">
+                <div class="aa-footer-widget">
+                  <!-- Display shop contact information -->
+                  <div class="aa-footer-widget">
+                    {% if section.settings.contact_info %}
+
+                    <h3>Contact Us</h3>
+                    <address>
+                      <p> {{section.settings.shop_address}}</p>
+                      <p><span class="fa fa-phone"> </span> {{section.settings.shop_phone}}</p>
+                      <p><span class="fa fa-envelope"> </span> {{section.settings.shop_email}}</p>
+                    </address>
+
+                    <div class="aa-footer-social">
+                      {%- assign social_accounts = 'Facebook, Twitter, Pinterest, Instagram, Snapchat, Tumblr, YouTube, Vimeo,' | split: ', ' -%}
+
+                      {% for social in social_accounts %}
+
+                      {%- assign social_handle = social | handleize -%}
+                      {% capture social_link %}social_{{ social_handle }}_link{% endcapture %}
+                      {% capture social_icon %}icon-{{ social_handle }}{% endcapture %}
+
+                      {% if settings[social_link] != blank %}
+                      <a href="{{ settings[social_link] }}"
+                        title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: social }}">
+                        {% include social_icon %}
+                      </a>
+                      {% endif %}
+                      {% endfor %}
+                    </div>
+
+
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- footer -->
+
+  <!-- footer-bottom -->
+  <div class="aa-footer-bottom">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-footer-bottom-area">
+            <p>{{ 'layout.footer.copyright' | t }} &copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: '/' }}.
+              {{powered_by_link }}</p>
+            <!-- Paymetn methods -->
+            <div class="aa-footer-payment">
+              {% if section.settings.show_payment_icons %}
+              {% unless shop.enabled_payment_types == empty %}
+              <span class="visually-hidden">{{ 'layout.footer.payment_methods' | t }}</span>
+              <ul class="payment-icons">
+                {% for type in shop.enabled_payment_types %}
+                <li>
+                  {{ type | payment_type_svg_tag: class: 'icon' }}
+                </li>
+                {% endfor %}
+              </ul>
+              {% endunless %}
+              {% endif %}
+            
+              {%- assign footer_linklist = section.settings.footer_linklist -%}
+              {% if linklists[footer_linklist].links.size > 0 %}
+              <ul class="nav justify-content-center">
+                {% for link in linklists[footer_linklist].links %}
+                <li class="nav-item"><a href="{{ link.url }}" class="nav-link active">{{ link.title }}</a></li>
+                {% endfor %}
+              </ul>
+              {% endif %}            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+{% schema %}
+{
+"name": "Footer",
+"settings": [
+  {
+    "type": "link_list",
+    "id": "footer_linklist",
+    "label": "First menu",
+    "default": "footer"
+  },
+  {
+    "type": "checkbox",
+    "id": "show_policies",
+    "label": "Show Shop Policies",
+    "default": true
+  },
+  {
+    "type": "checkbox",
+    "id": "contact_info",
+    "label": "Display Shop Contact Information",
+    "default": true
+  },
+  {
+    "type": "textarea",
+    "id":"shop_address",
+    "label": "Shop Address",
+    "default": "Road-number Road-name Bulding-name, City Post-code, State, Country."
+  },
+  {
+    "type": "text",
+    "id":"shop_phone",
+    "label": "Shop Contact Number",
+    "default": "+8801xxxxxxxxx"
+  },
+  {
+    "type": "text",
+    "id":"shop_email",
+    "label": "Shop Email Address",
+    "default": "shop@email.com"
+  }
+]
+}
+
+{% endschema %}

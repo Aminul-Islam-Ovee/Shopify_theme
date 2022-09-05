@@ -1,0 +1,112 @@
+<section id="aa-slider">
+    <div class="aa-slider-area">
+      <div id="sequence" class="seq">
+        <div class="seq-screen">
+          <ul class="seq-canvas">
+            {% for block in section.blocks %}
+              <!-- sliding item -->
+              <li>
+                <div class="seq-model" {% if forloop.first %} active {%endif%}>
+                  <img data-seq src="{{ block.settings.image | img_url:'master' }}" alt="..." />
+                </div>
+
+
+                <div class="seq-title">
+
+                  {%if block.settings.discounts > 0 %} 
+                    <span data-seq>Save Up to {{block.settings.discounts}}% Off</span>
+                  {%endif%}   
+
+                  {%if block.settings.title != blank%}           
+                    <h2 data-seq>{{block.settings.title}}</h2>
+                  {%endif%}  
+
+                  {%if block.settings.description != blank%}           
+                    <p data-seq>{{block.settings.description}}</p>
+                  {%endif%}  
+
+                  {%if block.settings.sale_link != blank%}           
+                    <a data-seq href="{{block.settings.sale_link}}" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>>
+                  {%endif%}  
+                  
+                </div>
+              </li>
+            {%endfor%}
+
+          </ul>
+        </div>
+
+        <!-- slider navigation btn -->
+        <fieldset class="seq-nav" aria-controls="sequence" aria-label="Slider buttons">
+          <a type="button" class="seq-prev" aria-label="Previous"><span class="fa fa-angle-left"></span></a>
+          <a type="button" class="seq-next" aria-label="Next"><span class="fa fa-angle-right"></span></a>
+        </fieldset>
+      </div>
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Image Slider",
+    "max_blocks": 10,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Image Slider"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Slider title"
+      }
+    ],
+
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Image",
+        "settings": [
+          
+            {
+              "type": "text",
+              "id": "title",
+              "label": "Image title"
+            },
+            {
+              "type": "image_picker",
+              "id": "image",
+              "label": "Image"
+            },
+            {
+              "type": "range",
+              "id": "discounts",
+              "min": 0,
+              "max": 100,
+              "step": 1,
+              "label": "Discount in percent",
+              "default": 0
+            },
+            {
+              "type": "text",
+              "id": "description",
+              "label": "Sale description"
+            },
+            {
+              "type":"url",
+              "id":"sale_link",
+              "label":"Insert sale's link"
+            }
+        ]
+      }
+    ],
+
+
+    "presets": [
+      {
+        "name": "Image Slider",
+        "category": "Image"
+      } 
+    ]
+  }
+{% endschema %}

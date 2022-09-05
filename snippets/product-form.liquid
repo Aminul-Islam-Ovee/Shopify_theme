@@ -1,0 +1,111 @@
+{% form 'product', product, data-product-form: '', data-product-handle: product.handle, data-enable-history-state: 'true' %}
+
+<div id="cart">
+
+
+  <select name="id" v-model="form.id" id="variant_id"  class="form-control">
+    {% for variant in product.variants %}
+      <option
+        {% if variant == current_variant %}selected="selected"{% endif %}
+        {% unless variant.available %}disabled="disabled"{% endunless %}
+        value="{{ variant.id }}">
+          {{ variant.title }}
+      </option>
+
+
+
+                  <!-- <h4>Size</h4>
+                    <div class="aa-prod-view-size">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                          {% for size in product.options_by_name['Size'].values %}
+                            <label class="btn btn-secondary active">
+                              <input type="radio" name="size" id="{{size}}" autocomplete="off" > {{size}}
+                            </label>
+                          {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <h4>Color</h4>
+                    <div class="aa-color-tag">
+                       <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                          {% for color in product.options_by_name['Color'].values %}
+                            <label class="btn btn-secondary active">
+                              <input type="radio" name="color" id="{{color}}" autocomplete="off" >
+                              <span>{{color}}</span>
+                            </label>
+                          {% endfor %}
+                        </div>                     
+                    </div>
+                    
+                    <h4>Quantity</h4>
+                    <div class="aa-prod-quantity" style="width: 150px;">
+                      <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+                              <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </span>
+                        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+                        <span class="input-group-btn">
+                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="aa-prod-view-bottom">
+                      <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                      <a class="aa-add-to-cart-btn" href="#">Buy It Now</a>
+                    </div><br> -->
+
+
+
+
+
+    {% endfor %}
+  </select>
+
+  <noscript>
+    <select name="id">
+      {% for variant in product.variants %}
+        <option
+          {% if variant == current_variant %}selected="selected"{% endif %}
+          {% unless variant.available %}disabled="disabled"{% endunless %}
+          value="{{ variant.id }}">
+            {{ variant.title }}
+        </option>
+      {% endfor %}
+    </select>
+  </noscript>
+
+  <div class="form-group">
+      <div class="row align-items-end">
+        <div class="col-md-6">
+            <label for="Quantity" class="form-label">{{ 'products.product.quantity' | t }}</label>
+            <input type="number" v-model="form.quantity" class="form-control" id="Quantity" name="quantity" value="1" min="1">
+        </div>
+      </div>
+
+      <span> Category:
+        {% for collection in product.collections %}
+        {% if forloop.last %} 
+         {{collection.title}}{% unless forloop.last %}, {% endunless %}
+         {% endif %}
+        {% endfor %}
+      </span>
+
+      <div>
+          <h1>{{current_variant}}</h1>
+            <button
+              type="button"
+              @click="addToCart"
+              name="add"
+              {%if product.available == false %} disabled {%endif%}>Add to cart
+            </button>
+      </div>
+
+  </div>
+
+</div>
+{% endform %}

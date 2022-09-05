@@ -1,0 +1,152 @@
+{% paginate collection.products by 9 %}
+
+<div class="productPage">
+
+  <!-- product category -->
+  <section id="aa-product-category">
+    <div class="container">
+      <header  role="banner">
+        <h2>{{ collection.title }}</h2>
+        {% if collection.description != blank %}
+        <div class="rte">
+          {{ collection.description }}
+        </div>
+        {% endif %}
+      </header>
+
+      <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-8 col-md-push-3">
+          <div class="aa-product-catg-content">
+            <div class="aa-product-catg-head">
+              <!-- Shorting product -->
+              <div class="aa-product-catg-head-left">
+                <label>Sort by</label>
+                <div class="dropdown">
+                  <ul>
+                      {% if collection.sort_by =="manual" %}
+                        {% assign shorting_by = "Featured" %}
+                      {% elsif collection.sort_by =="best-selling" %} 
+                        {% assign shorting_by = "Best selling" %}
+                      {% elsif collection.sort_by =="title-ascending" %} 
+                        {% assign shorting_by = "Alphabetically A-Z" %}
+                      {% elsif collection.sort_by =="title-descending" %} 
+                        {% assign shorting_by = "Alphabetically  Z-A" %}
+                      {% elsif collection.sort_by =="price-ascending" %} 
+                        {% assign shorting_by = "Price low to high" %}
+                      {% elsif collection.sort_by =="price-descending" %} 
+                        {% assign shorting_by = "Price high to low" %}
+                      {% elsif collection.sort_by =="created-ascending" %} 
+                        {% assign shorting_by = "Old to new" %}
+                      {% elsif collection.sort_by =="created-descending" %} 
+                        {% assign shorting_by = "New to old" %}
+                      {% endif %}
+                      
+                      <a  href="#" ><li class="disp_lock">{{-shorting_by -}}</li></a>
+                      {% for option in collection.sort_options %}
+                          <a class="sort_link" href="?sort_by={{option.value }}"><li>{{option.name}}</li></a>
+                      {% endfor %}
+                  </ul>
+                </div> 
+
+              </div>
+              <!-- Toggle menu button -->
+              <div class="aa-product-catg-head-right">
+                <a id="grid-catg" href="#"><span class="fa fa-th"></span></a>
+                <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
+              </div>
+            </div>
+            
+            <!-- Display ptoduct -->
+            <div class="aa-product-catg-body">
+              <ul class="aa-product-catg">
+                {%- for product in collection.products -%}
+                <!-- start single product item -->
+                <li>
+                  <figure>
+                    <a class="aa-product-img" href="{{ product.url | within: collection }}"><img
+                        src="{{product.featured_image  | img_url:'270x320', crop:'center' }}" alt="..."></a>
+
+                    <figcaption>
+                      <h4 class="aa-product-title"><b>{{product.title}}</b></h4>
+                      <span class="aa-product-price">{{shop.currency}} {{product.price | money_without_currency}}</span>
+                      {% if product.compare_at_price > product.price %}
+                      <span class="aa-product-price"><del>{{shop.currency}} {{product.compare_at_price |
+                          money_without_currency}}</del></span>
+                      {% endif%}
+                      <br><br>
+                      <p class="aa-product-descrip">{{product.description }}</p>
+                    </figcaption>
+                  </figure>
+
+                  <!-- product badge -->
+                  {% if product.compare_at_price > product.price and product.available%}
+                  <span class="aa-badge aa-hot"> ON SALE</span>
+                  {% elsif product.available == false %}
+                  <span class="aa-badge aa-sold-out"> STOCK OUT</span>
+                  {% else %}
+                  <span class="aa-badge aa-available"> AVAILABLE</span>
+                  {% endif%}
+                </li>
+                {%- endfor-%}  
+              </ul>
+              
+            </div>
+
+            <!-- Pagination products -->
+            <div class="aa-pagination">
+              <nav>
+                {% if paginate.pages > 1 %}
+                {% include 'pagination' %}
+                {% endif %}
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
+          <aside class="aa-sidebar">
+            <!-- single sidebar -->
+            <div class="aa-sidebar-widget">
+              <h3>Category</h3>
+              <ul class="aa-catg-nav">
+                {% assign c = 0 %}
+                {%for collection in collections%}
+                {%if c != 0%}
+                <li><a href="/collections/{{collection.title | handleize}}">{{collection.title}}</a></li>
+                {%endif%}
+                {% capture c %}1{% endcapture %}
+                {%- endfor-%}
+              </ul>
+            </div>
+            <!-- single sidebar -->
+            <div class="aa-sidebar-widget">
+              <h3>Tags</h3>
+              <div class="tag-cloud">
+                {% if collection.all_tags.size > 0 %}
+                <ul>
+                  {% for tag in collection.all_tags %}
+                  {% if current_tags contains tag %}
+                  <li class="active">
+                    {{ tag | link_to_remove_tag: tag }}
+                  </li>
+                  {% else %}
+                  <li>
+                    {{ tag | link_to_tag: tag }}
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
+            </div>
+            <!-- single sidebar -->
+          </aside>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  <!-- / product category -->
+
+</div>
+
+{% endpaginate %}

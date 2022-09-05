@@ -1,0 +1,82 @@
+<section id="aa-search-result">
+  <div class="container"><br>
+    {% if search.performed %}
+      {% if search.results_count == 0 %}
+      {%include "no-results-found.liquid"%}
+      {% else %}
+          <h2 class="visuallaa-product-categoryy-hidden">{{ 'general.search.heading' | t: count: search.results_count }}</h2>
+        
+          <!-- Number of resulaa-product-categoryt get -->
+          <div class="result-count">
+            {% if search.performed %}
+              {{search.results_count}} results are found for "{{search.terms}}"
+            {% else %}
+              {{ 'general.search.title' | t }}
+            {% endif %}
+          </div>
+
+          {% paginate search.results by 9 %}
+            <ul class="aa-search-list row">
+              {% for item in search.results %}
+                <li class="col-md-4">
+                    <a class="aa-search-img" href="{{ item.url | within: collection }}">
+                    {% assign featured_image = item.image | default: item.featured_image %}
+                    {% if featured_image != blank %}
+                      <!-- {{ item.image | img_url: '240x240' crop:'center' }} -->
+                      <img alt="img" src="{{featured_image  | img_url:'270x320', crop:'center' }}" alt="...">
+                    {% endif %}
+                    <h4 class="aa-search-title" >{{ item.title }}</h4>
+                    </a>
+                  
+                  {% if item.object_type == 'product' %}
+                    <p class="item-price">
+                      {% if item.compare_at_price > item.price %}
+                        {% if item.price_varies %}
+                          {% assign sale_price = item.price | money_without_currency %}
+                          {{shop.currency}} {{sale_price }}
+                        {% else %}
+                          
+                          <span>{{shop.currency}} {{ item.price | money_without_currency }}</span>
+                        {% endif %}
+                      
+                        <s>{{shop.currency}} {{ item.compare_at_price | money_without_currency }}</s>
+                      {% else %}
+                        {% if item.price_varies %}
+                          {% assign price = item.price | money_without_currency%}
+                          <span> {{shop.currency}} {{price: price }}</span>
+                        {% else %}
+                          <span>{{shop.currency}} {{ item.price | money_without_currency }}</span>
+                        {% endif %}
+                      {% endif %}
+                    </p>
+                    <!-- product badge -->
+                    {% if item.compare_at_price > item.price and item.available%}
+                    <span class="aa-badge aa-hot"> ON SALE</span>
+                    {% elsif item.available == false %}
+                    <span class="aa-badge aa-sold-out"> STOCK OUT</span>
+                    {% else %}
+                    <span class="aa-badge aa-available"> AVAILABLE</span>
+                    {% endif%}
+                  {% else %}
+                    <p class="blog-desc">{{ item.content | strip_html | truncate: 250 }}</p>
+                    <a class="aa-read-mor-btn" href="{{item.url}}">Read more <span class="fa fa-long-arrow-right"></span>
+                    </a>
+                  {% endif %}
+
+                </li>
+              {% endfor %}
+            </ul>
+
+            <div class="aa-pagination">
+              <nav>
+                {% if paginate.pages > 1 %}
+                {% include 'pagination' %}
+                {% endif %}
+              </nav>
+            </div>
+          {% endpaginate %}
+      {% endif %} 
+    {% endif %}
+  </div>
+</section>
+ 

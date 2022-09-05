@@ -1,0 +1,126 @@
+<header id="aa-header">
+  <!-- start header top  -->
+  <div class="aa-header-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-header-top-area">
+
+            <div class="aa-header-top-right">
+              <ul class="aa-head-top-nav-right">
+                <li class="hidden-xs"><a href="/cart">My Cart</a></li>
+                <li class="hidden-xs"><a href="/checkout">Checkout</a></li>
+
+                {%if customer%}
+                <li><a href="/account">My Account</a></li>
+                <li><a href="/account/logout"> Log out </a></li>
+                {% else%}
+                <li><a href="/account/login"> Login </a></li>
+                {%endif%}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / header top  -->
+
+  <!-- start header bottom  -->
+  <div class="aa-header-bottom">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-header-bottom-area">
+
+            <!-- logo  -->
+            <div class="aa-logo">
+              <a href="{{shop.url}}">
+                <img src="{{section.settings.logo | img_url:'master' }}" alt=""
+                  width="{{section.settings.logo_max_width}}px" height="{{section.settings.logo_max_height}}px">
+              </a>
+            </div>
+            <!-- / logo  -->
+
+            <!-- cart box -->
+            <div class="aa-cartbox">
+              <a class="aa-cart-link" href="/cart">
+                <span class="fa fa-shopping-cart"></span>
+                <span class="aa-cart-title">SHOPPING CART</span>
+                <span class="aa-cart-notify">{{ cart.item_count }}</span>
+              </a>
+              <div class="aa-cartbox-summary">
+                <div class="mini-cart">
+                  {%include 'mini-cart.liquid'%}
+                </div>
+
+              </div>
+            </div>
+            <!-- / cart box -->
+            <!-- search box -->
+            <div class="aa-search-box">
+              <form class="search" action="/search">
+                <input type="text" placeholder="Search" name="q" value="{{ search.terms | escape }}" />
+                <button type="submit"><span class="fa fa-search"></span></button>
+              </form>
+            </div>
+            <!-- / search box -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / header bottom  -->
+</header>
+<!-- / header section -->
+<!-- menu -->
+<section id="menu">
+  <div class="container">
+    <div class="menu-area">
+      <!-- Navbar -->
+      <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse  text-center">
+          <!-- Left nav -->
+          <ul class="nav navbar-nav">
+            <li><a href="{{shop.url}}"> Home</a></li>
+            <li><a href="#"> Collections </span></a>
+              <ul class="dropdown-menu">
+                {% assign c = 0 %}
+                {%for collection in collections%}
+                {%if c != 0%}
+                <li><a href="/collections/{{collection.title | handleize}}">{{collection.title}}</a></li>
+                {%endif%}
+                {% capture c %}1{% endcapture %}
+                {%- endfor-%}
+              </ul>
+            </li>
+            <li><a href="/blogs/news">News </a></li>
+
+            {%if pages.about-us != blank %}
+            <li><a href="/pages/about-us">About us </a></li>
+            {%endif%}
+
+            {%if pages.about != blank %}
+            <li><a href="/pages/about">About us </a></li>
+            {%endif%} 
+            
+            {%if pages.contact != blank %}
+            <li><a href="/pages/contact"> Contact </a></li>
+            {%endif%}
+          </ul>
+
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+</section>
+<!-- / menu -->

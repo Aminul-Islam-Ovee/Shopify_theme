@@ -1,0 +1,44 @@
+<!-- Tags -->
+<div class="col-md-3">
+    <aside class="aa-blog-sidebar">
+
+      {% if blog.all_tags.size > 0 %}
+      <div class="aa-sidebar-widget">
+        <h3>Tags</h3>
+        <div class="tag-cloud">
+          {% for tag in blog.all_tags %}
+            {% if current_tags contains tag %}
+            <a href="#">{{ tag }}</a>
+          {% else %}
+            {{ tag | link_to_tag: tag }}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+
+
+<!-- Recent Posts -->
+      <div class="aa-sidebar-widget">
+        <h3>Recent Post</h3>
+        <div class="aa-recently-views">
+          <ul>
+            {% for article in blog.articles %}
+              <li>
+                <a class="aa-cartbox-img" href="{{article.url}}"><img src="{{article.image  | img_url:'180', crop:'center' }}" alt="img"></a>
+                <div class="aa-cartbox-info">
+                  <h4><a href="{{article.url}}">{{article.title}}</a></h4>
+                  {% capture date %}{{ article.published_at | time_tag: format: 'month_day_year' }}{% endcapture %}
+                  <p><i class="fa fa-clock-o"></i>  {{date: date}}</p>
+                </div>
+              </li>
+              {% if forloop.index == 4%}
+              {% break %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>

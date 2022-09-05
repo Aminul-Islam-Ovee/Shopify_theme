@@ -1,0 +1,79 @@
+{% paginate blog.articles by 9%}
+
+<!-- Blog Archive -->
+<section id="aa-blog-archive">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="aa-blog-archive-area aa-blog-archive-2">
+          <div class="row">
+            <div class="col-md-9">
+              <div class="aa-blog-content">
+                <!-- Page title -->
+                {%- assign blog_title = blog.title -%}
+                {% if current_tags %}
+                {% capture blog_title %}{{ blog.title | link_to: blog.url }} &mdash; {{ current_tags.first }}{%
+                endcapture %}
+                {% endif %}
+                <h2>{{ blog_title }}</h2><br>
+                <div class="row">
+
+
+
+
+                  {% for article in blog.articles %}
+                  <div class="col-md-4 col-sm-4">
+                    <article class="aa-latest-blog-single">
+
+                      <!-- Blog image -->
+                      <figure class="aa-blog-img">
+                        <a href="{{article.url}}"><img alt="img"
+                            src="{{article.image  | img_url:'270x320', crop:'center' }}" alt="..."></a>
+
+                        <figcaption class="aa-blog-img-caption">
+                          {% capture date %}{{ article.published_at | time_tag: format: 'month_day_year' }}{% endcapture
+                          %}
+                          <span href="#"><i class="fa fa-clock-o"></i>{{date: date}}</span>
+                          {%- if blog.comments_enabled? and article.comments_count > 0 -%}
+                          <a href="{{ article.url }}#comments"><i class="fa fa-comment-o"></i>{{ article.comments_count
+                            }}</a>
+                          {%- endif -%}
+
+                        </figcaption>
+                      </figure>
+
+                      <div class="aa-blog-info">
+                        <h3 class="aa-blog-title"><a href="{{ article.url }}">{{article.title}}</a></h3>
+
+                        <p>{{ article.content | strip_html | truncate: 200 }}</p>
+                        <a class="aa-read-mor-btn" href="{{article.url}}">Read more <span
+                            class="fa fa-long-arrow-right"></span></a>
+                      </div>
+
+                    </article>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+              <!-- Blog Pagination -->
+              <div class="aa-pagination">
+                <nav>
+                  {% if paginate.pages > 1 %}
+                  {% include 'pagination' %}
+                  {% endif %}
+                </nav>
+              </div>
+            </div>
+
+            <!-- Side bar Tags-->
+            {%include 'blog-sidebar.liquid' %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- / Blog Archive -->
+
+{% endpaginate %}
